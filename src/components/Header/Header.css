@@ -1,0 +1,48 @@
+/* theme color: 
+     orange500 #FF9800
+     grey500 #9E9E9E
+*/
+
+.header {
+	width: 100%;
+	height: 60px;
+	padding: 0 30px;
+	overflow: auto;
+}
+.header-logo, .header-title, .header-nav {
+	line-height: 60px;
+	float: left;
+}
+.header-logo {
+	width: 60px; 
+	height: 60px;
+}
+.header-title {
+	font-size: 2rem;
+	font-weight: 100;
+}
+.header-nav {
+	float: right;
+	width: 300px;
+	height: 60px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.header-nav span {
+	line-height: 20px;
+	padding: 10px 15px;
+	cursor: pointer;
+}
+
+.header-nav span:hover {
+	border-bottom: 2px solid #FF9800;
+}
+
+.header-nav-signin {
+	border: 1px solid #9E9E9E;
+}
+
+.header-nav-signin:hover {
+	border-bottom: 1px solid #9E9E9E;
+}
