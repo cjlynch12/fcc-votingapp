@@ -1,8 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+
+import pollTheme from './style/theme.js';
 import './index.css';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+injectTapEventPlugin();
+ReactDOM.render(
+	<MuiThemeProvider muiTheme={pollTheme}>
+		<App />
+	</MuiThemeProvider>, document.getElementById('root'));
 registerServiceWorker();

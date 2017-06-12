@@ -1,15 +1,24 @@
+// modules
 import React from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import pollTheme from './style/theme.js';
+import {BrowserRouter as Router, Route } from 'react-router-dom'
+// style
 import './style/App.css';
+// components
 import Header from './components/Header/Header'
+import Home from './components/Home/Home'
+
+const About = () => <h1>About</h1>
 
 class App extends React.Component {
   render() {
     return (
-      <MuiThemeProvider muiTheme={pollTheme}>
-        <Header />
-      </MuiThemeProvider>
+        <Router>
+        	<div>
+        		<Header />
+        		<Route exact path="/" component={Home} />
+        		<Route path="/about" component={About} />
+        	</div>
+        </Router>
     );
   }
 }
