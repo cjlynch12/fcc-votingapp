@@ -42,7 +42,7 @@ a{
 
 /* global */
 body {
-  min-width: 270px;
+  min-width: 280px;
   height: 100vh;
   margin: 0;
   padding: 0;
@@ -51,6 +51,7 @@ body {
   background: #F0F0F0;
   line-height: 1;
   overflow: hidden;
+  user-select: none;
 }
 
 #root, #root > div {
@@ -88,6 +89,12 @@ body {
 	font-weight: 100;
 }
 
+.text-title-3 {
+	font-size: 1.7rem;
+	color: #FF9800;
+	font-weight: 100;
+}
+
 .text-title-5 {
 	font-weight: 300;
 }
@@ -96,11 +103,45 @@ em {
 	color: #FF9800;
 }
 
+.background-poll1 {
+	width: 100vw;
+	height: 55vh;
+	position: absolute;
+	bottom: -125px;
+	right: -70px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: 100% 100%;
+	transform: rotate(-11deg);
+	z-index: -1;
+}
+
+@media all and (max-width: 800px) {
+	.background-poll1 {
+		bottom: -80px;
+		transform: rotate(-15deg);
+	}
+}
+
+@media all and (max-width: 650px) {
+	.background-poll1 {
+		width: 110vw;
+		bottom: -70px;
+	}
+}
+
+@media all and (max-width: 500px) {
+	.background-poll1 {
+		width: 120vw;
+		bottom: -50px;
+	}
+}
+
 /* animation */
 @keyframes fade-in-bottom {
 	0% {
 		opacity: 0;
-		transform: translate(0, 50px);
+		transform: translate(0, 30px);
 	}
 	30% {
 		opacity: 0;

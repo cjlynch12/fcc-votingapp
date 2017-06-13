@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import RaisedButton from 'material-ui/RaisedButton';
 import './Home.css';
 
-const Home = () => (
+const Home = (props) => (
 	<div className="container">
 		<div className="hero">
 			<h1 className="text-title-1">
@@ -15,7 +15,9 @@ const Home = () => (
 				<p className="text-title-5">Create public or private polls, <em>free</em>, <em>unlimited</em>, <em>always</em>.</p>
 			</div>
 			<Link to="#">
-				<RaisedButton className="hero-btn" label="Get Started >>" secondary={true} />
+				<RaisedButton className="hero-btn" label="Get Started >>" primary={true} 
+					onTouchTap={props.openSignin}
+				/>
 			</Link>
 			<Link to="/list">
 				<RaisedButton className="hero-btn" label="View Poll List" />

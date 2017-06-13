@@ -7,6 +7,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 import pollTheme from './style/theme.js';
+import './style/font-awesome.min.css';
 import './index.css';
 
 injectTapEventPlugin();

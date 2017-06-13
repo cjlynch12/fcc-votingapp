@@ -32,7 +32,7 @@ class Header extends React.Component{
 		  	<nav className="header-nav">
 		  		<Link className="header-nav-about" to="/about">About</Link>
 				<Link className="header-nav-polllist" to="/list">Poll list</Link>
-				<Link className="header-nav-signin" to="#">Sign in</Link>
+				<Link className="header-nav-signin" to="#" onTouchTap={this.props.openSignin}>Sign in</Link>
 		  	</nav>
 		  	<div className="header-nav-sm">
 		  		<IconButton>
@@ -52,7 +52,7 @@ class Header extends React.Component{
 		          	    <Link to="/list">Poll list</Link>
 	          	    </MenuItem>
 		            <MenuItem onTouchTap={this.handleClose}>
-		            	<Link to="#">Sign in</Link>
+		            	<Link to="#" onTouchTap={this.props.openSignin}>Sign in</Link>
 	            	</MenuItem>
 		        </Drawer>
 		      </div>
