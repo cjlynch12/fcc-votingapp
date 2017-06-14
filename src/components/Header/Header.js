@@ -16,13 +16,13 @@ const drawerContainerStyle = {
 }
 
 class Header extends React.Component{
-	constructor(props) {
-	    super(props);
-	    this.state = {open: false};
-	  }
+	state = {
+		open: false
+	}
 	handleToggle = () => this.setState({open: !this.state.open});
 	handleClose = () => this.setState({open: false});
 	render(){
+		console.log(this.props);
 		return (
 		  <header className="header">
 		  	<Link className="header-logo" to="/">

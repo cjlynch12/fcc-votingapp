@@ -6,7 +6,7 @@
    	 #F0F0F0;
 */
 
-/* reset */
+/* ====== reset ====== */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -40,33 +40,35 @@ a{
 	color: #000;
 }
 
-/* global */
+/* ====== global ====== */
 body {
   min-width: 280px;
-  height: 100vh;
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
   background: #F0F0F0;
   line-height: 1;
-  overflow: hidden;
   user-select: none;
+  overflow: hidden;
 }
 
-#root, #root > div {
+.app-root {
+	width: 100vw;
 	height: 100vh;
+	position: fixed;
+	overflow: hidden;
 }
 
-/* reuse */
+/* ====== reuse ====== */
+
+/* --- container --- */
 .container {
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
   height: calc(100vh - 60px);
-  overflow-x: visible;
-  overflow-y: hidden;
 }
 @media (min-width: 768px) {
   .container {
@@ -84,6 +86,7 @@ body {
   }
 }
 
+/* --- text --- */
 .text-title-1 {
 	font-size: 3.2rem;
 	font-weight: 100;
@@ -95,6 +98,12 @@ body {
 	font-weight: 100;
 }
 
+.text-title-4 {
+	font-size: 2.2rem;
+	font-weight: 100;
+	color: #616161;
+}
+
 .text-title-5 {
 	font-weight: 300;
 }
@@ -103,6 +112,34 @@ em {
 	color: #FF9800;
 }
 
+/* --- divided page --- */
+
+.divide::before, .divide::after {
+	content: '';
+	width: 50vw;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	z-index: -1;
+}
+
+.divide::before{
+	background: #FEFEFE;
+	left: 0;
+}
+
+.divide::after{
+	background: #F0F0F0;
+	right: 0;
+}
+
+@media all and (max-width: 700px){
+	.divide::before, .divide::after {
+		background: #FEFEFE;
+	}
+}
+
+/* --- background-poll1 --- */
 .background-poll1 {
 	width: 100vw;
 	height: 55vh;
@@ -137,7 +174,58 @@ em {
 	}
 }
 
-/* animation */
+/* --- background-poll2 --- */
+.background-poll2 {
+	width: 50vw;
+	height: 100vh;
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	background-repeat: no-repeat;
+	background-size: contain;
+	background-position: 0% 100%;
+	opacity: 0.4;
+	z-index: -1;
+}
+
+@media all and (max-width: 700px) {
+	.background-poll2 {
+		opacity: 0;
+	}
+}
+
+/* --- left and right --- */
+.left-right-wrapper{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.left, .right {
+	height: 100vh;
+	width: 50vw;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+@media all and (max-width: 700px){
+	.left-right-wrapper{
+		flex-direction: column;
+	}
+	.left, .right {
+		width: 100vw;
+	}
+	.left {
+		height: 45vh;
+	}
+	.right {
+		height: 55vh;
+	}
+}
+
+/* ====== animation ====== */
 @keyframes fade-in-bottom {
 	0% {
 		opacity: 0;

@@ -1,4 +1,4 @@
-.container {
+.poll-list-container {
 	padding-top: 30px;
 	display: flex;
 	flex-wrap: wrap;
@@ -17,7 +17,7 @@
 	top: -4px;
 }
 
-.text-title-3 {
+.poll-list-container .text-title-3 {
 	margin-right: 15px;
 }
 
@@ -25,6 +25,17 @@
 	height: 65vh;
 	margin-top: 20px;
 	overflow: scroll;
+	opacity: 0;
+	animation: fade-in-bottom 1s 0.2s ease-in-out;
+	animation-fill-mode: forwards;
+}
+
+.poll-list-item>div>div {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 14px 28px !important;
+	cursor: pointer;
 }
 
 .voteNum {
