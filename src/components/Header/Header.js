@@ -22,7 +22,6 @@ class Header extends React.Component{
 	handleToggle = () => this.setState({open: !this.state.open});
 	handleClose = () => this.setState({open: false});
 	render(){
-		console.log(this.props);
 		return (
 		  <header className="header">
 		  	<Link className="header-logo" to="/">

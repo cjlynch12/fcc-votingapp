@@ -1,0 +1,14 @@
+.poll-question {
+	padding: 30px 20px 0 20px;
+	font-weight: 500;
+}
+
+.poll-vote-wrapper {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.poll-vote-wrapper p {
+	padding: 25px 20px 0 20px;
+}

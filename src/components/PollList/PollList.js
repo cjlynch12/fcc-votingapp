@@ -5,6 +5,7 @@ import MenuItem from 'material-ui/MenuItem';
 import {List, ListItem} from 'material-ui/List';
 import Badge from 'material-ui/Badge';
 import "./PollList.css";
+import PollVote from '../PollDetail/PollVote';
 
 const VoteNum = (props) => (
 	<Badge className="voteNum"
@@ -19,6 +20,14 @@ class PollList extends React.Component {
 				id: 1,
 				author: 'Ammmmmmy White',
 				topic: 'Your favorite breed of dog',
+				options: [
+					{optionId: 0, option: 'Retrievers', vote: 800},
+					{optionId: 1, option: 'German Shepherd Dogs', vote: 520},
+					{optionId: 2, option: 'Bulldogs', vote: 106},
+					{optionId: 3, option: 'Rottweilers', vote: 80},
+					{optionId: 4, option: 'Pointers', vote: 100},
+					{optionId: 5, option: 'Corgis', vote: 600}
+				],
 				postTime: 'Tue Mar 02 2017 12:17:29 GMT-0700 (PDT)',
 				voteNum: 2206,
 				type: 'public'
@@ -97,7 +106,9 @@ class PollList extends React.Component {
 			}
 		],
 		searchInput: '',
-		sortType: 'rank'
+		sortType: 'rank',
+		pollVoteOpen: false,
+		pollVoteData: []
 	}
 	handleInputChange = (e) => {
 		this.setState({searchInput: e.target.value})
@@ -108,6 +119,13 @@ class PollList extends React.Component {
 	parseTime = (timeStr) => {
 		let timeObj = new Date(timeStr);
 		return `${timeObj.getUTCFullYear()}/${timeObj.getMonth() + 1}/${timeObj.getDate()}`;
+	}
+	openPollVote = (id) => {
+		let pollVoteData = this.state.list.filter(listItem => listItem.id === id);
+		this.setState({pollVoteOpen: true, pollVoteData: pollVoteData[0]});
+	}
+	closePollVote = () => {
+		this.setState({pollVoteOpen: false});
 	}
 	render(){
 		return (
@@ -127,8 +145,8 @@ class PollList extends React.Component {
 			            value={this.state.sortType}
 			            onChange={this.handleSortChange}
 			        >
-			          <MenuItem value="rank" primaryText="vote number" />
-			          <MenuItem value="time" primaryText="time posted" />
+			          <MenuItem value="rank" primaryText="most popular" />
+			          <MenuItem value="time" primaryText="most recent" />
 			        </SelectField>
 			    </div>
 			    <List style={{width: "100%"}} className="poll-list">
@@ -145,12 +163,17 @@ class PollList extends React.Component {
 										<span className="time">{this.parseTime(item.postTime)}</span>
 									</div>
 						        }
-						      />
+						        onTouchTap={this.openPollVote.bind(null, item.id)}
+						    />
 			    		))
 			    	}
 			    </List>
 				<div className="background-poll1" 
 					style={{backgroundImage: "url(./images/poll1.jpg)"}}/>
+				<PollVote 
+					pollVoteOpen={this.state.pollVoteOpen} 
+					pollVoteData={this.state.pollVoteData} 
+					closePollVote={this.closePollVote} />
 			</div>
 		)
 	}

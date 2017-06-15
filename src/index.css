@@ -39,6 +39,9 @@ a{
 	text-decoration: none;
 	color: #000;
 }
+button span {
+	font-weight: 300 !important;
+}
 
 /* ====== global ====== */
 body {
@@ -89,6 +92,11 @@ body {
 /* --- text --- */
 .text-title-1 {
 	font-size: 3.2rem;
+	font-weight: 100;
+}
+
+.text-title-2 {
+	font-size: 2.4rem;
 	font-weight: 100;
 }
 
