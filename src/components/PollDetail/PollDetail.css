@@ -8,9 +8,9 @@
 .poll-detail-info {
 	margin: 30px 50px;
 	margin-bottom: 10px !important;
-	opacity: 0;
-	animation: fade-in-bottom 0.8s 0.2s ease-in-out;
-	animation-fill-mode: forwards;
+/*	opacity: 0;
+    animation: fade-in-bottom 0.8s 0.2s ease-in-out;
+	animation-fill-mode: forwards;  */
 }
 
 .poll-detail .text-title-2 {
@@ -28,14 +28,14 @@
 
 .poll-detail-info-desc .text-title-5 {
 	line-height: 1.5rem;
-	color: #757575
+	color: #757575;
 }
 
 .poll-detail-info-btn {
 	margin: 10px 20px 10px 0;
-	opacity: 0;
-	animation: fade-in-bottom 1s 0.6s ease-in-out;
-	animation-fill-mode: forwards;
+/*	opacity: 0;
+ 	animation: fade-in-bottom 1s 0.6s ease-in-out;
+	animation-fill-mode: forwards; */
 }
 
 .poll-detail-info .fa-twitter {
@@ -47,8 +47,32 @@
 .poll-detail-chart {
 	width: calc(100% - 100px);
 	height: calc(100% - 280px);
-	border: 1px solid;
 	margin: 10px auto;
+	position: relative;
+	overflow-y: auto;
+}
+
+.poll-detail-chart .bar {
+	position: absolute;
+	background: #FF9800;
+}
+
+.poll-detail-chart .label {
+	position: relative;
+	top: -15px;
+	font-weight: 300;
+    font-size: 0.9rem;
+    color: #757575;
+    white-space: nowrap;
+}
+
+.poll-detail-chart .vote {
+	position: absolute;
+	top: 5px;
+    right: 7px;
+    font-weight: 300;
+    font-size: 0.8rem;
+	color: #fff;
 }
 
 @media all and (max-width: 800px) {

@@ -35,15 +35,16 @@ const About = () => (
 			<h3 className="text-title-4">Author</h3>
 			<Paper className="about-picture"
 				style={paperStyle.author} zDepth={2} circle={true} />
-			<div className="author-social-media">
-                <a className="fa fa-github" href="https://github.com/antipasjiajia"></a>
-                <a className="fa fa-linkedin-square" href="https://www.linkedin.com/in/jia-guo-40921642/?trk=nav_responsive_tab_profile_pic"></a>
-                <a className="fa fa-codepen" href="https://codepen.io/antipasjiajia/"></a>
-                <a className="fa fa-free-code-camp" href="https://www.freecodecamp.com/antipasjiajia"></a>
-			</div>
 			<ul className="about-list-wrapper">
-				<li className="about-list-item">author desc</li>
-				<li className="about-list-item">author desc</li>
+				<li className="about-list-item author">Jia Guo</li>
+				<div className="author-social-media">
+	                <a className="fa fa-github" href="https://github.com/antipasjiajia"></a>
+	                <a className="fa fa-linkedin-square" href="https://www.linkedin.com/in/jia-guo-40921642/?trk=nav_responsive_tab_profile_pic"></a>
+	                <a className="fa fa-codepen" href="https://codepen.io/antipasjiajia/"></a>
+	                <a className="fa fa-free-code-camp" href="https://www.freecodecamp.com/antipasjiajia"></a>
+				</div>
+				<li className="about-list-item"><i className="fa fa-map-marker"></i> Palo Alto, CA</li>
+				<li className="about-list-item"><a href="https://antipasjiajia.github.io/">https://antipasjiajia.github.io/</a></li>
 			</ul>
 		</div>
 		<div className="background-poll2" style={{backgroundImage: "url(./images/poll2.jpg)"}}/>

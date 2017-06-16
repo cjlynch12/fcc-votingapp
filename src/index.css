@@ -116,6 +116,11 @@ body {
 	font-weight: 300;
 }
 
+.text-title-6 {
+	font-size: 0.9rem;
+	font-weight: 100;
+}
+
 em {
 	color: #FF9800;
 }
@@ -224,12 +229,7 @@ em {
 	}
 	.left, .right {
 		width: 100vw;
-	}
-	.left {
-		height: 45vh;
-	}
-	.right {
-		height: 55vh;
+		height: auto;
 	}
 }
 

@@ -17,10 +17,20 @@ const drawerContainerStyle = {
 
 class Header extends React.Component{
 	state = {
-		open: false
+		open: false,
+		login: true
 	}
-	handleToggle = () => this.setState({open: !this.state.open});
-	handleClose = () => this.setState({open: false});
+	handleSidebarToggle = () => this.setState({open: !this.state.open});
+	handleSidebarClose = () => this.setState({open: false});
+	handleLogout = () => this.setState({login: false}); // also need to destory token...
+	renderSignin = () => (
+		<MenuItem onTouchTap={() => {this.handleSidebarClose(); this.props.openSignin();}}>
+        	Sign in
+    	</MenuItem>
+	)
+	renderLogout = () => {
+
+	}
 	render(){
 		return (
 		  <header className="header">
@@ -31,11 +41,21 @@ class Header extends React.Component{
 		  	<nav className="header-nav">
 		  		<Link className="header-nav-about" to="/about">About</Link>
 				<Link className="header-nav-polllist" to="/list">Poll list</Link>
-				<Link className="header-nav-signin" to="#" onTouchTap={this.props.openSignin}>Sign in</Link>
+				{
+					this.state.login ?
+						<div>
+							<Link className="header-nav-newpoll" to="#" 
+								onTouchTap={this.props.openNewPoll}>Create New</Link>
+							<Link className="header-nav-logout" to="#" 
+								onTouchTap={this.handleLogout}>Logout</Link>
+						</div>
+						:
+						<Link className="header-nav-signin" to="#" onTouchTap={this.props.openSignin}>Sign in</Link>
+				}
 		  	</nav>
 		  	<div className="header-nav-sm">
 		  		<IconButton>
-		  			<MenuIcon onTouchTap={this.handleToggle} />
+		  			<MenuIcon onTouchTap={this.handleSidebarToggle} />
 		  		</IconButton>
 		        <Drawer 
 		        	className="header-nav-side"
@@ -44,15 +64,26 @@ class Header extends React.Component{
 		        	onRequestChange={(open) => this.setState({open})}
 		        	containerStyle={drawerContainerStyle}
 				>
-		            <MenuItem onTouchTap={this.handleClose}> 
+		            <MenuItem onTouchTap={this.handleSidebarClose}> 
 		          	    <Link to="/about">About</Link>
 	          	    </MenuItem>
-		            <MenuItem onTouchTap={this.handleClose}>
+		            <MenuItem onTouchTap={this.handleSidebarClose}>
 		          	    <Link to="/list">Poll list</Link>
 	          	    </MenuItem>
-		            <MenuItem onTouchTap={this.handleClose}>
-		            	<Link to="#" onTouchTap={this.props.openSignin}>Sign in</Link>
-	            	</MenuItem>
+	          	    {
+	          	    	this.state.login ?
+		          	    	<div>
+			          	    	<MenuItem onTouchTap={this.handleSidebarClose}>
+					          	    <Link to="#" onTouchTap={this.props.openNewPoll}>Create New</Link>
+				          	    </MenuItem> 
+				          	    <MenuItem onTouchTap={this.handleSidebarClose}>
+					          	    <Link to="#" onTouchTap={this.handleLogout}>Logout</Link>
+				          	    </MenuItem>
+			          	    </div> :
+		          	    	<MenuItem onTouchTap={this.handleSidebarClose}>
+					        	<Link to="#" onTouchTap={this.props.openSignin}>Sign in</Link>
+					    	</MenuItem>
+	          	    }
 		        </Drawer>
 		      </div>
 		  </header>

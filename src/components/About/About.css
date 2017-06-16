@@ -4,12 +4,12 @@
 }
 
 .about-left {
-	animation: fade-in-bottom 1.2s 0.2s ease-in-out;
+	animation: fade-in-bottom 0.8s 0.1s ease-in-out;
 	animation-fill-mode: forwards;
 }
 
 .about-right {
-	animation: fade-in-bottom 1.2s 0.5s ease-in-out;
+	animation: fade-in-bottom 1s 0.5s ease-in-out;
 	animation-fill-mode: forwards;
 }
 
@@ -26,12 +26,16 @@
 }
 
 .about-list-item a {
-	color: #FF9800;
+	color: #212121;
 	cursor: pointer;
 }
 
 .about-list-item a:hover {
 	text-decoration: underline;
+}
+
+.about-list-item.author {
+	font-size: 1.5rem;
 }
 
 .author-social-media {
@@ -52,6 +56,9 @@
 }
 
 @media all and (max-width: 700px){
+	.about-left, .about-right {
+		padding: 20px;
+	}
 	.about h3 {
 		margin-bottom: 10px;
 	}

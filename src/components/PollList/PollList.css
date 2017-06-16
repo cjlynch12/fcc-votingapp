@@ -86,6 +86,9 @@
 		font-size: 1.4rem; 
 		margin-top: 30px;
 	}
+	.poll-list {
+		height: 55vh;
+	}
 	.poll-list-item>div>div {
 		padding: 14px !important;
 	}

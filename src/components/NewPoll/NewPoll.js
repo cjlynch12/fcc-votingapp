@@ -12,8 +12,12 @@ export default class NewPoll extends React.Component {
 		question: '',
 		options: ['', '']
 	}
+	componentWillReceiveProps(nextProps){
+		this.setState({open: nextProps.open});
+	}
 	handleClose = () => {
 		this.setState({open: false})
+		this.props.closeNewPoll();
 	}
 	handleOpen = () => {
 		this.setState({open: true})

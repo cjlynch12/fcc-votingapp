@@ -31,9 +31,9 @@ export default class PollVote extends React.Component {
 	}
 	render() {
 		const actions = [
-			 <RaisedButton label="<< Back to list" style={{float: 'left'}} onTouchTap={this.handleClose}/>,
-			 <Link to={'/' + this.state.pollVoteData.id} >
-			 	<RaisedButton label="Vote and see result >>" primary={true}  onTouchTap={this.handleVote}/>
+			<RaisedButton className="poll-vote-btn" label="<< Back to list" style={{float: 'left'}} onTouchTap={this.handleClose}/>,
+			<Link to={'/poll' + this.state.pollVoteData.id} >
+			 	<RaisedButton className="poll-vote-btn" label="Vote and see result >>" primary={true}  onTouchTap={this.handleVote}/>
 	 		</Link>
 	    ];
 	    let pollVoteData = this.state.pollVoteData;
@@ -51,7 +51,7 @@ export default class PollVote extends React.Component {
 	          <p className="poll-question">{this.state.pollVoteData.topic}</p>
 	          <div className="poll-vote-wrapper">
 	          	  <p className="text-title-5">I'd like to vote for</p>
-		          <SelectField
+		          <SelectField className="poll-vote-option"
 			          floatingLabelText="Choose an option..."
 			          value={this.state.optionSelected}
 			          onChange={this.handleSelect}

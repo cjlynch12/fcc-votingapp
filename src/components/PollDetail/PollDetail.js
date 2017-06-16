@@ -25,6 +25,10 @@ export default class PollDetail extends React.Component {
 	}
 	componentDidMount(){
 		this.renderChart();
+		window.addEventListener('resize', this.renderChart);
+	}
+	componentWillUnmount(){
+		window.removeEventListener('resize', this.renderChart);
 	}
 	parseTime = (timeStr) => {
 		let timeObj = new Date(timeStr);
@@ -34,32 +38,29 @@ export default class PollDetail extends React.Component {
 		let chart = d3.select('#chart');
 		let data = this.state.data.options;
 		let width = chart.node().clientWidth;
-		let height = chart.node().clientHeight;
 		let xScale = d3.scaleLinear()
 			.domain([0, d3.max(data, d => d.vote)])
 			.range([0, width]);
-		let yScale = d3.scaleBand()
-			.domain(data.map(d => d.option))
-			.range([0, height])
-			.ticks(5)
-			  .tickSize(10)
-			  .tickPadding(5);
-		let yAxis = d3.axisLeft(yScale);
-		chart.append('g')
-			.call(yAxis);
-		chart.append('g')
-			.selectAll('rect')
+		chart.selectAll('.bar').remove();
+		let bars = chart
+			.selectAll('.bar')
 			.data(data)
 			.enter()
-			.append('rect')
-			.attr('x', d => xScale(d.vote))
-		    .attr('y', d => yScale(d.option))
-		    .attr('height', d => yScale.bandwidth())
-		    .attr('width', d => width - xScale(d.vote));
+			.append('div')
+			.attr('class', 'bar');
+		bars.append('div').attr('class', 'label').text(d => d.option);
+		bars.append('div').attr('class', 'vote').text(d => d.vote);
+		bars
+		    .style('top', (d, i) => i * 50 + 30 + 'px')
+		    .style('height', '20px')
+		    .style('width', '0px')
+		    .transition()
+		    .delay(500)
+		    .duration(1000)
+		    .style('width', d => xScale(d.vote) + 'px');
 	}
 	render(){
 		let data = this.state.data;
-		let options = data.options;
 		return (
 			<div className="container poll-detail">
 	        	<div className="poll-detail-info">
@@ -77,7 +78,7 @@ export default class PollDetail extends React.Component {
 					<RaisedButton className="poll-detail-info-btn" label="Share on Twitter" primary={true} 
 						icon={<i className="fa fa-twitter" />} />
 				</div>
-				<div className="poll-detail-chart" id="chart"></div>
+				<div className="poll-detail-chart" id="chart" ref="chart"></div>
 				<div className="background-poll1" style={{backgroundImage: "url(./images/poll1.jpg)"}}/>
 			</div>
 		)
