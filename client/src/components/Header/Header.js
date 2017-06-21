@@ -20,17 +20,9 @@ class Header extends React.Component{
 		open: false,
 		login: true
 	}
-	handleSidebarToggle = () => this.setState({open: !this.state.open});
-	handleSidebarClose = () => this.setState({open: false});
-	handleLogout = () => this.setState({login: false}); // also need to destory token...
-	renderSignin = () => (
-		<MenuItem onTouchTap={() => {this.handleSidebarClose(); this.props.openSignin();}}>
-        	Sign in
-    	</MenuItem>
-	)
-	renderLogout = () => {
-
-	}
+	handleSidebarToggle = () => this.setState({open: !this.state.open})
+	handleSidebarClose = () => this.setState({open: false})
+	handleLogout = () => this.setState({login: false}) // also need to destory token...
 	render(){
 		return (
 		  <header className="header">
