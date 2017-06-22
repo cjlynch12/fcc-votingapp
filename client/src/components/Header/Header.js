@@ -38,6 +38,7 @@ class Header extends React.Component{
 						<div>
 							<Link className="header-nav-newpoll" to="#" 
 								onTouchTap={this.props.openNewPoll}>Create New</Link>
+							<Link className="header-nav-mypolls" to="/mypoll">My Polls</Link>
 							<Link className="header-nav-logout" to="#" 
 								onTouchTap={this.handleLogout}>Logout</Link>
 						</div>
@@ -67,6 +68,9 @@ class Header extends React.Component{
 		          	    	<div>
 			          	    	<MenuItem onTouchTap={this.handleSidebarClose}>
 					          	    <Link to="#" onTouchTap={this.props.openNewPoll}>Create New</Link>
+				          	    </MenuItem> 
+				          	    <MenuItem onTouchTap={this.handleSidebarClose}>
+					          	    <Link to="/mypoll" >My Polls</Link>
 				          	    </MenuItem> 
 				          	    <MenuItem onTouchTap={this.handleSidebarClose}>
 					          	    <Link to="#" onTouchTap={this.handleLogout}>Logout</Link>

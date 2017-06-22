@@ -13,29 +13,34 @@ import PollDetail from './components/PollDetail/PollDetail';
 import Signin from './components/Signin/Signin';
 import NewPoll from './components/NewPoll/NewPoll';
 // server communication
-import {getPollList} from './lib/client';
+import {getPollList, userLogin} from './lib/client';
+import {updatePollList, addNewPoll} from './lib/helper';
 
 class App extends React.Component {
 	state = {
 		signinOpen: false,
 		newPollOpen: false,
 		pollList: [],
-		user: {
-	        "_id": "5949972b97b56d3ebe4074fc",
-	        "username": "Ammmmmmy White",
-	        "pollVoted": [
-	            "594991c73f5ad13ea0cdfc64"
-	        ],
-	        "pollCreated": [
-	            "59495c90d90e973d802f0aac",
-	            "59499a4b68e5263eca2daa00"
-	        ]
-	    }
+		user: {}
 	}
 	componentDidMount(){
 		this.loadPollList();
+		// loadUser needs to change to signin and logout
+		this.loadUser();
 	}
 	loadPollList = () => getPollList(pollList => this.setState({pollList}))
+	loadUser = () => userLogin("Ammmmmmy White", user => this.setState({user}))
+	updateDataForNewVote = (updatedPoll, updatedUser) => {
+		let updatedPollList = updatePollList(updatedPoll, this.state.pollList);
+		this.setState({pollList: updatedPollList, user: updatedUser});
+	} 
+	updateDataForNewPoll = (newPoll, updatedUser) => {
+		let updatedPollList = addNewPoll(newPoll, this.state.pollList);
+		this.setState({pollList: updatedPollList, user: updatedUser});
+	}
+	updateDataForDeletePoll = () => {
+		console.log('app.js received deletion');
+	}
 	openSignin = () => this.setState({signinOpen: true})
 	closeSignin = () => this.setState({signinOpen: false})
 	openNewPoll = () => this.setState({newPollOpen: true})
@@ -48,11 +53,35 @@ class App extends React.Component {
 
 		    		<Route exact path="/" render={() => <Home openSignin={this.openSignin} />} />
 		    		<Route path="/about" component={About} />
-		    		<Route path="/list" render={() => <PollList pollList={this.state.pollList} user={this.state.user} />} />
-		    		<Route path="/poll:pollId" render={() => <PollDetail pollList={this.state.pollList} user={this.state.user} />} />
+		    		<Route path="/list" render={() => (
+		    			<PollList 
+		    				pollList={this.state.pollList} 
+		    				user={this.state.user} 
+		    				updateDataForNewVote={this.updateDataForNewVote}
+		    			/>
+		    		)} />
+		    		<Route path="/mypoll" render={() => {
+		    			let username = this.state.user.username;
+		    			if(!username) return null;
+		    			let pollList = this.state.pollList.filter(poll => poll.author === username);
+		    			return <PollList 
+		    				pollList={pollList} 
+		    				user={this.state.user} 
+		    				deletable={true}
+		    				updateDataForDeletePoll={this.updateDataForDeletePoll}
+		    			/>
+		    		}} />
+		    		<Route path="/poll:pollId" render={({match}) => {
+		    			let pollId = match.params.pollId;
+		    			let pollData = this.state.pollList.find(poll => poll._id === pollId);
+		    			return <PollDetail pollData={pollData} user={this.state.user} />
+		    		}} />
 
 		    		<Signin open={this.state.signinOpen} closeSignin={this.closeSignin} />
-		    		<NewPoll open={this.state.newPollOpen} closeNewPoll={this.closeNewPoll} />
+		    		<NewPoll 
+		    			pollList={this.state.pollList} user={this.state.user} 
+		    			updateDataForNewPoll={this.updateDataForNewPoll}
+		    			open={this.state.newPollOpen} closeNewPoll={this.closeNewPoll} />
 		    		<Footer />
 		    	</div>
 		    </Router>

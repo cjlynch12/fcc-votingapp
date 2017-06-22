@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {vote} from '../../lib/client';
+import {updateUser, updatePoll} from '../../lib/helper';
 import './PollVote.css';
 
 export default class PollVote extends React.Component {
@@ -24,23 +25,24 @@ export default class PollVote extends React.Component {
 	}
 	handleSelect = (e, i, value) => this.setState({optionSelected: {optionId: i, value}})
 	handleVote = () => {
-		if(this.state.optionSelected.optionId !== undefined) {
+		if((this.state.optionSelected.optionId !== undefined) && this.props.user._id) {
 			let options = this.props.pollVoteData.options;
 			options.forEach(option => {
 				if(option.optionId === this.state.optionSelected.optionId){
 					option.vote += 1;
 				}
 			});
-			let pollVoted = this.props.user.pollVoted;
-			pollVoted.push(this.props.pollVoteData._id);
+			let voteNum = this.props.pollVoteData.voteNum + 1;
 			let voteData = {
 				userId: this.props.user._id,
-				pollVoted: pollVoted,
-				options: options,
-				voteNum: this.props.pollVoteData.voteNum + 1
-			}
-			console.log(voteData);
-			vote(this.props.pollVoteData._id, voteData, res => console.log(res));
+				options,
+				voteNum
+			};
+			vote(this.props.pollVoteData._id, voteData);
+			this.props.updateDataForNewVote(
+				updatePoll(this.props.pollVoteData, {options, voteNum}), 
+				updateUser('pollVoted', this.props.pollVoteData._id, this.props.user)
+			);
 		}
 		this.handleClose();
 	}

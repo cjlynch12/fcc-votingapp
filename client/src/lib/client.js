@@ -11,7 +11,7 @@ export const getPollList = successCb => (
 export const vote = (id, data, successCb) => (
 	fetch('/poll/' + id, {
 		method: 'put',
-		body: data,
+		body: JSON.stringify(data),
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
@@ -21,6 +21,28 @@ export const vote = (id, data, successCb) => (
 	  .then(successCb)
 )
 
+export const postNewPoll = (data, successCb) => (
+	fetch('/poll', {
+		method: 'post',
+		body: JSON.stringify(data),
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		}
+	}).then(checkStatus)
+	  .then(parseJSON)
+	  .then(successCb)
+)
+
+export const userLogin = (username, successCb) => (
+	fetch('/users/' + username, {
+		headers: {
+			'Accept': 'application/json',
+		}
+	}).then(checkStatus)
+	  .then(parseJSON)
+	  .then(successCb)
+)
 
 const checkStatus = res => {
 	if(res.status >= 200 && res.status < 300) {

@@ -48,7 +48,7 @@ app.post('/poll', (req, res) => {
 				if(err){
 					console.log(err); res.end();
 				} else {
-					res.json({status: 'poll created', id: poll.id});
+					res.json({status: 'poll created', poll});
 				}
 			});
 		}
@@ -61,21 +61,20 @@ app.put('/poll/:id', (req, res) => {
 		options: req.body.options,
 		voteNum: req.body.voteNum
 	};
-	let pollVoted = req.body.pollVoted;
-	Polls.findByIdAndUpdate(req.params.id, updatedPoll, (err, poll) => {
-		if(err){
-			console.log(err);
-			res.json({message: err.message});
-		} else {
-			Users.findByIdAndUpdate(req.body.userId, {pollVoted}, (err, user) => {
-				if(err){
-					console.log(err); res.end();
-				} else {
-					res.json({status: 'poll updated', id: poll.id});
-				}
-			});
-		}
-	});
+	Users.findById(req.body.userId, (err, user) => {
+		if(err) console.log(err);
+		if(user.pollVoted.includes(req.params.id)){
+			res.json({message: 'cannot vote again'});
+		} 
+		let updatedPollVoted = [...user.pollVoted, req.params.id];
+		Polls.findByIdAndUpdate(req.params.id, updatedPoll, (err, poll) => {
+			if(err) console.log(err);
+			Users.findByIdAndUpdate(req.body.userId, {pollVoted: updatedPollVoted}, (err, user) => {
+				if(err) console.log(err);
+				res.json({status: 'poll updated', id: poll.id});
+			})
+		})
+	})
 });
 
 // remove poll
@@ -85,10 +84,13 @@ app.delete('/poll/:id', (req, res) => {
 			console.log(err);
 			res.json({message: err.message});
 		} else {
-			let pollCreated = req.body.pollCreated
+			let pollCreated = req.body.pollCreated;
+			let index = pollCreated.findIndex(pollId => pollId === req.params.id);
+			pollCreated = [...pollCreated.slice(0, index), ...pollCreated(index + 1)];
 			Users.findByIdAndUpdate(req.body.userId, {pollCreated}, (err, user) => {
 				if(err){
-					console.log(err); res.end();
+					console.log(err); 
+					res.end();
 				} else {
 					res.json({status: 'poll removed', id: poll.id});
 				}
@@ -101,6 +103,13 @@ app.delete('/poll/:id', (req, res) => {
 app.get('/users', (req, res) => {
 	Users.find({}, (err, users) => {
 		res.json(users);
+	});
+});
+
+// get user by username (need to change to user authenticate)
+app.get('/users/:username', (req, res) => {
+	Users.findOne({username: req.params.username}, (err, user) => {
+		res.json(user);
 	});
 });
 

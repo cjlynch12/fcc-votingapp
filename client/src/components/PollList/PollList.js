@@ -7,6 +7,7 @@ import {List, ListItem} from 'material-ui/List';
 import Badge from 'material-ui/Badge';
 import "./PollList.css";
 import PollVote from '../PollDetail/PollVote';
+import PollEdit from '../PollDetail/PollEdit';
 
 const VoteNum = (props) => (
 	<Badge className="voteNum"
@@ -14,18 +15,24 @@ const VoteNum = (props) => (
 		badgeStyle={{position: 'static', width: 40, borderRadius: 20}} />
 )
 
+const DeleteBtn = (props) => (
+	<div className="deleteBtn">
+		<i className=" fa fa-trash"></i>
+	</div>
+)
+
 const PollListItem = (props) => (
 	<ListItem className="poll-list-item"
-        leftIcon={<VoteNum voteNum={props.voteNum} />}
+        leftIcon={props.deletable ? <DeleteBtn /> : <VoteNum voteNum={props.voteNum} />}
         primaryText={props.topic}
         secondaryText={
         	<div className="list-item-secondary">
-				<span className="author">by {props.author}</span>
+				<span className="author">{props.deletable ? `vote: ${props.voteNum}` : `by ${props.author}`}</span>
 				<span className="bar"> | </span>
 				<span className="time">{props.postTimeDisplay}</span>
 			</div>
         }
-        onTouchTap={props.onTouchTap}
+        onTouchTap={props.handleListClick}
     />
 )
 
@@ -34,22 +41,39 @@ class PollList extends React.Component {
 		searchInput: '',
 		sortType: 'rank',
 		pollVoteOpen: false,
-		pollVoteData: []
+		pollVoteData: [],
+		pollEditOpen: false
 	}
 	handleInputChange = (e) => this.setState({searchInput: e.target.value})
 	handleSortChange = (e, i, type) => this.setState({sortType: type})
-	renderPollListItem = (pollList, user) => (
-		pollList.map(poll => (
-			user.pollVoted.includes(poll._id) ?
-			<Link to={'/poll' + poll._id} key={poll._id}>
-				<PollListItem {...poll} postTimeDisplay={this.parseTime(poll.postTime)} />
-			</Link> 
-			:
-			<PollListItem key={poll._id} {...poll} 
-				postTimeDisplay={this.parseTime(poll.postTime)} 
-				onTouchTap={this.openPollVote.bind(null, poll._id)} />
-		))
-	)
+	renderPollListItem = (pollList, user) => {
+		if(user._id){
+			if(this.props.deletable){
+				return pollList.map(poll => (
+					<PollListItem key={poll._id} {...poll} deletable={true}
+						postTimeDisplay={this.parseTime(poll.postTime)} 
+						handleListClick={this.openPollEdit.bind(null, poll._id)} />
+				))
+			} else {
+				return pollList.map(poll => (
+					user.pollVoted.includes(poll._id) ?
+					<Link to={'/poll' + poll._id} key={poll._id} >
+						<PollListItem {...poll} postTimeDisplay={this.parseTime(poll.postTime)} />
+					</Link> 
+					:
+					<PollListItem key={poll._id} {...poll} 
+						postTimeDisplay={this.parseTime(poll.postTime)} 
+						handleListClick={this.openPollVote.bind(null, poll._id)} />
+				))
+			}
+		} else {
+			return pollList.map(poll => (
+				<PollListItem key={poll._id} {...poll} 
+					postTimeDisplay={this.parseTime(poll.postTime)} 
+					handleListClick={this.openPollVote.bind(null, poll._id)} />
+			))
+		}
+	}
 	sortPollList = (pollList) => {
 		return pollList.sort((l1, l2) => {
 			if(this.state.sortType === 'rank'){
@@ -71,8 +95,12 @@ class PollList extends React.Component {
 		return `${timeObj.getUTCFullYear()}/${timeObj.getMonth() + 1}/${timeObj.getDate()}`;
 	}
 	openPollVote = (id) => {
-		let pollVoteData = this.props.pollList.filter(listItem => listItem._id === id);
-		this.setState({pollVoteOpen: true, pollVoteData: pollVoteData[0]});
+		let pollVoteData = this.props.pollList.find(listItem => listItem._id === id);
+		this.setState({pollVoteOpen: true, pollVoteData: pollVoteData});
+	}
+	openPollEdit = (id) => {
+		let pollData = this.props.pollList.find(listItem => listItem._id === id);
+		this.setState({pollEditOpen: true, pollData: pollData});
 	}
 	closePollVote = () => {
 		this.setState({pollVoteOpen: false});
@@ -112,7 +140,15 @@ class PollList extends React.Component {
 					user={this.props.user}
 					pollVoteOpen={this.state.pollVoteOpen} 
 					pollVoteData={this.state.pollVoteData} 
-					closePollVote={this.closePollVote} />
+					closePollVote={this.closePollVote} 
+					updateDataForNewVote={this.props.updateDataForNewVote}
+				/>
+				<PollVote 
+					user={this.props.user}
+					pollEditOpen={this.state.pollVoteOpen} 
+					pollData={this.state.pollData} 
+					closePollEdit={this.closePollEdit} 
+				/>
 			</div>
 		)
 	}

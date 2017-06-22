@@ -4,26 +4,41 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import RadioBtn from 'material-ui/svg-icons/toggle/radio-button-checked';
 import Close from 'material-ui/svg-icons/content/clear';
+import {postNewPoll} from '../../lib/client';
+import {checkOptions, formatOptions, updateUser} from '../../lib/helper';
 import './NewPoll.css';
 
 export default class NewPoll extends React.Component {
 	state = {
 		open: false,
 		question: '',
+		questionErrorText: '',
 		options: ['', '']
 	}
 	componentWillReceiveProps(nextProps){
 		this.setState({open: nextProps.open});
 	}
 	handleClose = () => {
-		this.setState({open: false})
+		this.setState({
+			open: false, 
+			question: '',
+			questionErrorText: '',
+			options: ['', '']
+		});
 		this.props.closeNewPoll();
 	}
-	handleOpen = () => {
-		this.setState({open: true})
-	}
+	handleOpen = () => this.setState({open: true})
 	updateQuestion = (e) => {
-		this.setState({question: e.target.value});
+		this.setState({question: e.target.value})
+		if(e.target.value !== '')
+			this.setState({questionErrorText: ''})
+	}
+	handleQuestionBlur = () => {
+		if(this.state.question === ''){
+			this.setState({questionErrorText: 'This field is required'})
+		} else if(this.props.pollList.filter(poll => poll.topic === this.state.question).length) {
+			this.setState({questionErrorText: 'A poll with the same question already exists'})
+		}
 	}
 	addOption = () => {
 		let stateOptions = this.state.options;
@@ -36,7 +51,6 @@ export default class NewPoll extends React.Component {
 		this.setState({options});
 	}
 	updateOption = (i, e) => {
-		console.log(e.target.value);
 		let stateOptions = this.state.options;
 		let options = [...stateOptions.slice(0, i), e.target.value, ...stateOptions.slice(i+1)];
 		this.setState({options});
@@ -52,6 +66,24 @@ export default class NewPoll extends React.Component {
 			    <Close style={{fill: '#BDBDBD'}} onTouchTap={this.removeOption.bind(null, i)} />
 		    </div>)
 	}
+	submitNewPoll = () => {
+		this.handleClose();
+		if(!this.state.question || this.state.questionErrorText) return;
+		if(!checkOptions(this.state.options)) return;
+		let {user} = this.props;
+		let newPollData = {
+			author: user.username,
+			userId: user._id,
+			pollCreated: user.pollCreated,
+			topic: this.state.question,
+			options: formatOptions(this.state.options)
+		};
+		postNewPoll(newPollData, res => {
+			let newPoll = res.poll;
+			let updatedUser = updateUser('pollCreated', newPoll._id, this.props.user);
+			this.props.updateDataForNewPoll(newPoll, updatedUser);
+		});
+	}
 	render(){
 		const actions = [
 	      <FlatButton
@@ -60,10 +92,10 @@ export default class NewPoll extends React.Component {
 	        style={{color: '#9E9E9E'}}
 	      />,
 	      <FlatButton
-	        label="SAVE"
+	        label="SUBMIT"
 	        primary={true}
 	        keyboardFocused={true}
-	        onTouchTap={this.handleClose}
+	        onTouchTap={this.submitNewPoll}
 	      />,
 	    ];
 	    return (
@@ -71,6 +103,7 @@ export default class NewPoll extends React.Component {
 	        <Dialog className="newpoll-dialog"
 	          title="New Poll"
 	          actions={actions}
+	          actionsContainerStyle={{padding: '0 30px 20px 30px'}}
 	          modal={false}
 	          open={this.state.open}
 	          onRequestClose={this.handleClose}
@@ -79,8 +112,10 @@ export default class NewPoll extends React.Component {
 	        	<TextField className="newpoll-question"
 			        hintText="Question"
 			        floatingLabelText="Question"
+			        errorText={this.state.questionErrorText}
 			        value={this.state.question}
 			        onChange={this.updateQuestion}
+			        onBlur={this.handleQuestionBlur}
 			    />
 			    {this.renderOptions()}
 			    <FlatButton
