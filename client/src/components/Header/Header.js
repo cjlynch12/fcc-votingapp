@@ -5,6 +5,8 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
+import IconMenu from 'material-ui/IconMenu';
+import Divider from 'material-ui/Divider';
 
 const drawerContainerStyle = {
 	textAlign: "center", 
@@ -18,7 +20,10 @@ const drawerContainerStyle = {
 class Header extends React.Component{
 	state = {
 		open: false,
-		login: true
+		login: !!this.props.user._id
+	}
+	componentWillReceiveProps(nextProps){
+		this.setState({login: !!nextProps.user._id})
 	}
 	handleSidebarToggle = () => this.setState({open: !this.state.open})
 	handleSidebarClose = () => this.setState({open: false})
@@ -35,13 +40,28 @@ class Header extends React.Component{
 				<Link className="header-nav-polllist" to="/list">Poll list</Link>
 				{
 					this.state.login ?
-						<div>
-							<Link className="header-nav-newpoll" to="#" 
-								onTouchTap={this.props.openNewPoll}>Create New</Link>
-							<Link className="header-nav-mypolls" to="/mypoll">My Polls</Link>
-							<Link className="header-nav-logout" to="#" 
-								onTouchTap={this.handleLogout}>Logout</Link>
-						</div>
+						<IconMenu
+					        iconButtonElement={<a className="header-nav-user">Welcome, {this.props.user.username}</a>}
+					        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+					        targetOrigin={{horizontal: 'right', vertical: 'top'}}
+					    >
+				            <MenuItem>
+				            	<Link className="header-nav-newpoll" to="#" onTouchTap={this.props.openNewPoll}>
+				            		Create New
+				            	</Link>
+				            </MenuItem>
+				            <MenuItem>
+				            	<Link className="header-nav-mypolls" to="/mypoll">
+				            		View My Polls
+				            	</Link>
+				            </MenuItem>
+				            <Divider />
+				            <MenuItem>
+				            	<Link className="header-nav-logout" to="#" onTouchTap={this.handleLogout}>
+				            		Logout
+				            	</Link>
+				            </MenuItem>
+				        </IconMenu>
 						:
 						<Link className="header-nav-signin" to="#" onTouchTap={this.props.openSignin}>Sign in</Link>
 				}

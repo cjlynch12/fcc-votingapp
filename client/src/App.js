@@ -29,7 +29,7 @@ class App extends React.Component {
 		this.loadUser();
 	}
 	loadPollList = () => getPollList(pollList => this.setState({pollList}))
-	loadUser = () => userLogin("Ammmmmmy White", user => this.setState({user}))
+	loadUser = () => userLogin("Ammmmmmy White", user => this.setState({user})) // need to change
 	updateDataForNewVote = (updatedPoll, updatedUser) => {
 		let updatedPollList = updatePollList(updatedPoll, this.state.pollList);
 		this.setState({pollList: updatedPollList, user: updatedUser});
@@ -47,10 +47,11 @@ class App extends React.Component {
 	openNewPoll = () => this.setState({newPollOpen: true})
 	closeNewPoll = () => this.setState({newPollOpen: false})
 	render() {
+		console.log(this.state.user);
 		return (
 		    <Router>
 		    	<div className={this.state.divide ? "app-root divide" : "app-root"}>
-		    		<Header openSignin={this.openSignin} openNewPoll={this.openNewPoll} />
+		    		<Header openSignin={this.openSignin} openNewPoll={this.openNewPoll} user={this.state.user} />
 
 		    		<Route exact path="/" render={() => <Home openSignin={this.openSignin} />} />
 		    		<Route path="/about" component={About} />
