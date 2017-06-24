@@ -14,7 +14,7 @@ import Signin from './components/Signin/Signin';
 import NewPoll from './components/NewPoll/NewPoll';
 // server communication
 import {getPollList, userLogin} from './lib/client';
-import {updatePollList, addNewPoll} from './lib/helper';
+import {updatePollList, addNewPoll, removePollById} from './lib/helper';
 
 class App extends React.Component {
 	state = {
@@ -38,8 +38,9 @@ class App extends React.Component {
 		let updatedPollList = addNewPoll(newPoll, this.state.pollList);
 		this.setState({pollList: updatedPollList, user: updatedUser});
 	}
-	updateDataForDeletePoll = () => {
-		console.log('app.js received deletion');
+	updateDataForDeletePoll = (pollId, updatedUser) => {
+		let updatedPollList = removePollById(pollId, this.state.pollList);
+		this.setState({pollList: updatedPollList, user: updatedUser});
 	}
 	openSignin = () => this.setState({signinOpen: true})
 	closeSignin = () => this.setState({signinOpen: false})

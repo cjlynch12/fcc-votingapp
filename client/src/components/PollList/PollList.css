@@ -38,15 +38,15 @@
 	cursor: pointer;
 }
 
-.voteNum {
+.poll-list-icon {
 	position: static !important;
 	padding: 0 !important;
 	margin: 0 !important;
 	order: 1;
 }
 
-.deleteBtn {
-	font-size: 1.2rem !important;
+.editBtn {
+	font-size: 1.4rem !important;
 	color: #FF9800;
 }
 
@@ -82,7 +82,7 @@
 }
 
 @media all and (max-width: 600px){
-	.voteNum {
+	.poll-list-icon {
 		order: 3;
 	}
 	.poll-list-item div div div:nth-child(2){

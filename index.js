@@ -86,7 +86,7 @@ app.delete('/poll/:id', (req, res) => {
 		} else {
 			let pollCreated = req.body.pollCreated;
 			let index = pollCreated.findIndex(pollId => pollId === req.params.id);
-			pollCreated = [...pollCreated.slice(0, index), ...pollCreated(index + 1)];
+			pollCreated = [...pollCreated.slice(0, index), ...pollCreated.slice(index + 1)];
 			Users.findByIdAndUpdate(req.body.userId, {pollCreated}, (err, user) => {
 				if(err){
 					console.log(err); 

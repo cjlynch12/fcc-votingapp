@@ -34,6 +34,19 @@ export const postNewPoll = (data, successCb) => (
 	  .then(successCb)
 )
 
+export const deletePoll = (id, data, successCb) => {
+	fetch('/poll/' + id, {
+		method: 'delete',
+		body: JSON.stringify(data),
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		}
+	}).then(checkStatus)
+	  .then(parseJSON)
+	  .then(successCb)
+}
+
 export const userLogin = (username, successCb) => (
 	fetch('/users/' + username, {
 		headers: {
