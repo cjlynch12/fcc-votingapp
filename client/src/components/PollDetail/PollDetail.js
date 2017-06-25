@@ -63,8 +63,11 @@ export default class PollDetail extends React.Component {
 						<Link to="/list">
 							<RaisedButton className="poll-detail-info-btn" label="<< Back to list" />
 						</Link>
-						<RaisedButton className="poll-detail-info-btn" label="Share on Twitter" primary={true} 
-							icon={<i className="fa fa-twitter" />} />
+						<a href={`https://twitter.com/intent/tweet?hashtags=2poll&text=View this poll at ${this.props.basePath}poll${pollData._id}`} 
+							target="_blank" >
+							<RaisedButton className="poll-detail-info-btn" label="Share on Twitter" primary={true} 
+								icon={<i className="fa fa-twitter" />} />
+						</a>
 					</div>
 					<div className="poll-detail-chart" id="chart" ref="chart"></div>
 					<div className="background-poll1" style={{backgroundImage: "url(./images/poll1.jpg)"}}/>

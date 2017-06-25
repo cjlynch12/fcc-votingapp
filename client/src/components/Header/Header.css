@@ -43,7 +43,7 @@
 .header-nav a {
 	line-height: 20px;
 	padding: 8px 18px;
-	margin: 0 10px;
+	margin: 0 15px;
 	border-bottom: 2px solid #F0F0F0;;
 	cursor: pointer;
 }
@@ -63,6 +63,11 @@ a.header-nav-signin:hover {
 	background: #FF9800;
 	color: #fff;
 	border: 1px solid #FF9800;
+}
+
+a.header-nav-user {
+	display: flex;
+    align-items: center;
 }
 
 a.header-nav-logout {

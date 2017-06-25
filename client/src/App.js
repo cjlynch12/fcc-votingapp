@@ -16,6 +16,8 @@ import NewPoll from './components/NewPoll/NewPoll';
 import {getPollList, userLogin} from './lib/client';
 import {updatePollList, addNewPoll, removePollById} from './lib/helper';
 
+const basePath = "http://localhost:3000/";
+
 class App extends React.Component {
 	state = {
 		signinOpen: false,
@@ -47,7 +49,6 @@ class App extends React.Component {
 	openNewPoll = () => this.setState({newPollOpen: true})
 	closeNewPoll = () => this.setState({newPollOpen: false})
 	render() {
-		console.log(this.state.user);
 		return (
 		    <Router>
 		    	<div className={this.state.divide ? "app-root divide" : "app-root"}>
@@ -76,7 +77,7 @@ class App extends React.Component {
 		    		<Route path="/poll:pollId" render={({match}) => {
 		    			let pollId = match.params.pollId;
 		    			let pollData = this.state.pollList.find(poll => poll._id === pollId);
-		    			return <PollDetail pollData={pollData} user={this.state.user} />
+		    			return <PollDetail pollData={pollData} user={this.state.user} basePath={basePath} />
 		    		}} />
 
 		    		<Signin open={this.state.signinOpen} closeSignin={this.closeSignin} />

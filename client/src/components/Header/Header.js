@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom'
 import './Header.css';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui/svg-icons/navigation/menu';
+import ExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
-import IconMenu from 'material-ui/IconMenu';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
 import Divider from 'material-ui/Divider';
 
 const drawerContainerStyle = {
@@ -19,14 +21,20 @@ const drawerContainerStyle = {
 
 class Header extends React.Component{
 	state = {
-		open: false,
+		sidebarOpen: false,
+		menuOpen: false,
 		login: !!this.props.user._id
 	}
 	componentWillReceiveProps(nextProps){
 		this.setState({login: !!nextProps.user._id})
 	}
-	handleSidebarToggle = () => this.setState({open: !this.state.open})
-	handleSidebarClose = () => this.setState({open: false})
+	handleSidebarToggle = () => this.setState({sidebarOpen: !this.state.sidebarOpen})
+	handleSidebarClose = () => this.setState({sidebarOpen: false})
+	handleMenuOpen = e => {
+	    e.preventDefault();
+	    this.setState({menuOpen: true, anchorEl: e.currentTarget})
+	}
+	handleMenuClose = () => this.setState({menuOpen: false})
 	handleLogout = () => this.setState({login: false}) // also need to destory token...
 	render(){
 		return (
@@ -40,28 +48,35 @@ class Header extends React.Component{
 				<Link className="header-nav-polllist" to="/list">Poll list</Link>
 				{
 					this.state.login ?
-						<IconMenu
-					        iconButtonElement={<a className="header-nav-user">Welcome, {this.props.user.username}</a>}
-					        anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-					        targetOrigin={{horizontal: 'right', vertical: 'top'}}
-					    >
-				            <MenuItem>
-				            	<Link className="header-nav-newpoll" to="#" onTouchTap={this.props.openNewPoll}>
-				            		Create New
-				            	</Link>
-				            </MenuItem>
-				            <MenuItem>
-				            	<Link className="header-nav-mypolls" to="/mypoll">
-				            		View My Polls
-				            	</Link>
-				            </MenuItem>
-				            <Divider />
-				            <MenuItem>
-				            	<Link className="header-nav-logout" to="#" onTouchTap={this.handleLogout}>
-				            		Logout
-				            	</Link>
-				            </MenuItem>
-				        </IconMenu>
+						<Link to="#" className="header-nav-user" onTouchTap={this.handleMenuOpen}>
+							Welcome <ExpandMoreIcon />
+							<Popover
+					          open={this.state.menuOpen}
+					          anchorEl={this.state.anchorEl}
+					          anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+					          targetOrigin={{horizontal: 'right', vertical: 'top'}}
+					          onRequestClose={this.handleMenuClose}
+					        >
+					          <Menu>
+					             <MenuItem>
+					            	<Link className="header-nav-newpoll" to="#" onTouchTap={() => {this.props.openNewPoll(); this.handleMenuClose();}}>
+					            		Create New
+					            	</Link>
+					            </MenuItem>
+					            <MenuItem>
+					            	<Link className="header-nav-mypolls" to="/mypoll" onTouchTap={this.handleMenuClose}>
+					            		View My Polls
+					            	</Link>
+					            </MenuItem>
+					            <Divider />
+					            <MenuItem>
+					            	<Link className="header-nav-logout" to="#" onTouchTap={() => {this.handleLogout(); this.handleMenuClose();}}>
+					            		Logout
+					            	</Link>
+					            </MenuItem>
+					          </Menu>
+					        </Popover>
+						</Link>
 						:
 						<Link className="header-nav-signin" to="#" onTouchTap={this.props.openSignin}>Sign in</Link>
 				}
@@ -73,8 +88,8 @@ class Header extends React.Component{
 		        <Drawer 
 		        	className="header-nav-side"
 		        	width={200} docked={false} openSecondary={true}
-		        	open={this.state.open} 
-		        	onRequestChange={(open) => this.setState({open})}
+		        	sidebarOpen={this.state.sidebarOpen} 
+		        	onRequestChange={(sidebarOpen) => this.setState({sidebarOpen})}
 		        	containerStyle={drawerContainerStyle}
 				>
 		            <MenuItem onTouchTap={this.handleSidebarClose}> 

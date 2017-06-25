@@ -33,11 +33,14 @@ export default class PollEdit extends React.Component {
 	render() {
 		let pollData = this.props.pollData;
 		const actions = [
+			<RaisedButton className="poll-vote-btn" label="Delete poll" style={{float: 'left'}} onTouchTap={this.handlePollDelete}/>,
 			<Link to={'/poll' + pollData._id} >
-			 	<RaisedButton className="poll-vote-btn" label="View poll result" style={{float: 'left'}} onTouchTap={this.handleVote}/>
-	 		</Link>,
-	 		<RaisedButton className="poll-vote-btn" label="Delete poll" primary={true} onTouchTap={this.handlePollDelete}/>
+			 	<RaisedButton className="poll-vote-btn" label="View poll result" primary={true} onTouchTap={this.handleVote}/>
+	 		</Link>
 	    ];
+	    let options = pollData.options ? 
+	          	pollData.options.map(option => option.option).join(', ') : ''
+	    console.log(pollData.options, options);
 	    return (
 	      <div>
 	        <Dialog
@@ -50,6 +53,8 @@ export default class PollEdit extends React.Component {
 	        >
 	          <h3 className="text-title-3">Question</h3>
 	          <p className="poll-question">{pollData.topic}</p>
+	          <p className="poll-info">Voted by: {pollData.voteNum}</p>
+	          <p className="poll-info">Options: {options}</p>
 	        </Dialog>
 	      </div>
 	    );
