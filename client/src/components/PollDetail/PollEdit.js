@@ -39,8 +39,7 @@ export default class PollEdit extends React.Component {
 	 		</Link>
 	    ];
 	    let options = pollData.options ? 
-	          	pollData.options.map(option => option.option).join(', ') : ''
-	    console.log(pollData.options, options);
+	          	pollData.options.map(option => option.option).join(', ') : '';
 	    return (
 	      <div>
 	        <Dialog

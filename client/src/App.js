@@ -13,7 +13,7 @@ import PollDetail from './components/PollDetail/PollDetail';
 import Signin from './components/Signin/Signin';
 import NewPoll from './components/NewPoll/NewPoll';
 // server communication
-import {getPollList, userLogin} from './lib/client';
+import {getPollList, userSignup, userLogin, userLogout} from './lib/client';
 import {updatePollList, addNewPoll, removePollById} from './lib/helper';
 
 const basePath = "http://localhost:3000/";
@@ -23,15 +23,22 @@ class App extends React.Component {
 		signinOpen: false,
 		newPollOpen: false,
 		pollList: [],
-		user: {}
+		user: {_id: '123'}
 	}
 	componentDidMount(){
 		this.loadPollList();
-		// loadUser needs to change to signin and logout
-		this.loadUser();
 	}
 	loadPollList = () => getPollList(pollList => this.setState({pollList}))
-	loadUser = () => userLogin("Ammmmmmy White", user => this.setState({user})) // need to change
+	userSignup = () => {
+		console.log('usersignup');
+		this.userLogin();
+	}
+	userLogin = () => {
+		console.log('userlogin');
+	}
+	userLogout = () => {
+		console.log('userlogout');
+	}
 	updateDataForNewVote = (updatedPoll, updatedUser) => {
 		let updatedPollList = updatePollList(updatedPoll, this.state.pollList);
 		this.setState({pollList: updatedPollList, user: updatedUser});
@@ -52,7 +59,9 @@ class App extends React.Component {
 		return (
 		    <Router>
 		    	<div className={this.state.divide ? "app-root divide" : "app-root"}>
-		    		<Header openSignin={this.openSignin} openNewPoll={this.openNewPoll} user={this.state.user} />
+		    		<Header openSignin={this.openSignin} openNewPoll={this.openNewPoll} 
+		    			user={this.state.user} userLogout={this.userLogout}
+		    		/>
 
 		    		<Route exact path="/" render={() => <Home openSignin={this.openSignin} />} />
 		    		<Route path="/about" component={About} />
@@ -80,7 +89,9 @@ class App extends React.Component {
 		    			return <PollDetail pollData={pollData} user={this.state.user} basePath={basePath} />
 		    		}} />
 
-		    		<Signin open={this.state.signinOpen} closeSignin={this.closeSignin} />
+		    		<Signin open={this.state.signinOpen} closeSignin={this.closeSignin} 
+		    			userSignup={this.userSignup} userLogin={this.userLogin}
+		    		/>
 		    		<NewPoll 
 		    			pollList={this.state.pollList} user={this.state.user} 
 		    			updateDataForNewPoll={this.updateDataForNewPoll}

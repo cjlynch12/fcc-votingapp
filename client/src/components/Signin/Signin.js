@@ -19,7 +19,11 @@ const btnStyle = {
 
 class Signin extends React.Component {
 	state = {
-		open: false
+		open: false,
+		fields: {
+			username: '',
+			password: ''
+		}
 	}
 	componentWillReceiveProps(nextProps){
 		this.setState({open: nextProps.open})
@@ -48,41 +52,88 @@ class Signin extends React.Component {
 	          	<i className="fa fa-github-square"></i>
 	          </div>
 	          <p>Or use your email</p>
-	          <SigninTab />
+	          <SigninTab userSignup={this.props.userSignup} userLogin={this.props.userLogin} />
 	        </Dialog>
 	    );
 	}
 }
 
-const SigninTab = (props) => (
-	<Tabs tabItemContainerStyle={tabStyle.tabItemContainerStyle}>
-		<Tab label="Sign up" buttonStyle={tabStyle.buttonStyle}>
-	      <div className="signin-tab-content">
-	        <TextField
-		      hintText="Email"
-		      fullWidth={true}
-		    />
-	        <TextField
-		      hintText="Password"
-		      fullWidth={true}
-		    />
-		    <RaisedButton label="Sign up" primary={true} style={btnStyle} />
-	      </div>
-	    </Tab>
-	    <Tab label="Log in" buttonStyle={tabStyle.buttonStyle}>
-	      <div className="signin-tab-content">
-	        <TextField
-		      hintText="Email"
-		      fullWidth={true}
-		    />
-	        <TextField
-		      hintText="Password"
-		      fullWidth={true}
-		    />
-		    <RaisedButton label="Log in" primary={true} style={btnStyle} />
-	      </div>
-	    </Tab>
-	</Tabs>
-)	
+class SigninTab extends React.Component{
+	state = {
+		fields: {
+			username: this.props.fields.username,
+			password: this.props.fields.password
+		},
+		errorText: {
+			username: '',
+			password: ''
+		}
+	}
+	componentWillReceiveProps(nextProps){
+		this.setState({
+			fields: {
+				username: nextProps.fields.username,
+				password: nextProps.fields.password
+			}
+		});
+	}
+	handleInputChange = e => {
+		let fields = this.state.fields;
+		let errorText = this.state.errorText;
+		let {name, value} = e.target;
+		fields[name] = value;
+		errorText[name] = '';
+		this.setState({fields, errorText});
+	}
+	handleSubmit = () => {
+		let {username, password} = this.state.fields;
+		if(username === '' || password === ''){
+			let errorText = {}
+			if(username === ''){
+				errorText.username = 'Username is required';
+			} else {
+				errorText.password = 'Password is required';
+			}
+			this.setState({errorText});
+			return;
+		}
+		
+
+	}	
+	renderTab = type => {
+		let label = type === 'signup' ? 'Sign up' : 'Log in';
+		return (
+			<Tab label="Sign up" buttonStyle={tabStyle.buttonStyle}>
+			  <div className="signin-tab-content">
+			    <TextField
+			    	name="username"
+			    	value={this.state.fields.username}
+			    	onChange={this.handleInputChange}
+			    	errorText={this.state.errorText.username}
+			        hintText="Username"
+			        fullWidth={true}
+			    />
+			    <TextField
+			    	name="password"
+			    	value={this.state.fields.password}
+			    	onChange={this.handleInputChange}
+			    	errorText={this.state.errorText.password}
+			        hintText="Password"
+			        fullWidth={true}
+			    />
+			    <RaisedButton label="Sign up" primary={true} style={btnStyle} onTouchTap={() => this.handleSubmit(type)} />
+			  </div>
+			</Tab>
+		)
+	}
+	render(){
+		return (
+			<Tabs tabItemContainerStyle={tabStyle.tabItemContainerStyle}>
+				{this.renderTab('signup')}
+			    {this.renderTab('login')}
+			</Tabs>
+		)
+	}
+}	
 
 export default Signin;

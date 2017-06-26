@@ -47,10 +47,36 @@ export const deletePoll = (id, data, successCb) => {
 	  .then(successCb)
 }
 
-export const userLogin = (username, successCb) => (
-	fetch('/users/' + username, {
+export const userSignup = (data, successCb) => (
+	fetch('/signup', {
+		method: 'post',
+		body: JSON.stringify(data),
 		headers: {
 			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		}
+	}).then(checkStatus)
+	  .then(parseJSON)
+	  .then(successCb)
+)
+
+export const userLogin = (data, successCb) => (
+	fetch('/login', {
+		method: 'post',
+		body: JSON.stringify(data),
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		}
+	}).then(checkStatus)
+	  .then(parseJSON)
+	  .then(successCb)
+)
+
+export const userLogout = successCb => (
+	fetch('/logout', {
+		headers: {
+			'Accept': 'application/json'
 		}
 	}).then(checkStatus)
 	  .then(parseJSON)

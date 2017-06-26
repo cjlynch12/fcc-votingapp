@@ -35,7 +35,10 @@ class Header extends React.Component{
 	    this.setState({menuOpen: true, anchorEl: e.currentTarget})
 	}
 	handleMenuClose = () => this.setState({menuOpen: false})
-	handleLogout = () => this.setState({login: false}) // also need to destory token...
+	handleLogout = () => {
+		this.setState({login: false});
+		this.props.userLogout();
+	}
 	render(){
 		return (
 		  <header className="header">
@@ -58,19 +61,19 @@ class Header extends React.Component{
 					          onRequestClose={this.handleMenuClose}
 					        >
 					          <Menu>
-					             <MenuItem>
-					            	<Link className="header-nav-newpoll" to="#" onTouchTap={() => {this.props.openNewPoll(); this.handleMenuClose();}}>
+					             <MenuItem onTouchTap={() => {this.props.openNewPoll(); this.handleMenuClose();}}>
+					            	<Link className="header-nav-newpoll" to="#">
 					            		Create New
 					            	</Link>
 					            </MenuItem>
-					            <MenuItem>
-					            	<Link className="header-nav-mypolls" to="/mypoll" onTouchTap={this.handleMenuClose}>
+					            <MenuItem onTouchTap={this.handleMenuClose}>
+					            	<Link className="header-nav-mypolls" to="/mypoll" >
 					            		View My Polls
 					            	</Link>
 					            </MenuItem>
 					            <Divider />
-					            <MenuItem>
-					            	<Link className="header-nav-logout" to="#" onTouchTap={() => {this.handleLogout(); this.handleMenuClose();}}>
+					            <MenuItem onTouchTap={() => {this.handleLogout(); this.handleMenuClose();}}>
+					            	<Link className="header-nav-logout" to="#">
 					            		Logout
 					            	</Link>
 					            </MenuItem>
