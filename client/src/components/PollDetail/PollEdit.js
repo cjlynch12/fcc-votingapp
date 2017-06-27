@@ -23,7 +23,7 @@ export default class PollEdit extends React.Component {
 	handlePollDelete = () => {
 		let {_id, pollCreated} = this.props.user;
 		let pollId = this.props.pollData._id;
-		let data = {userId: _id, pollCreated};
+		let data = {userId: _id, pollCreated, token: this.props.token};
 		deletePoll(pollId, data, res => {
 			let updatedUser = updateUserForPollRemove(pollId, this.props.user);
 			this.props.updateDataForDeletePoll(pollId, updatedUser);

@@ -47,6 +47,16 @@ export const deletePoll = (id, data, successCb) => {
 	  .then(successCb)
 }
 
+export const checkUsername = (username, successCb) => {
+	fetch('/users/' + username, {
+		headers: {
+			'Accept': 'application/json'
+		}
+	}).then(checkStatus)
+	  .then(parseJSON)
+	  .then(successCb)
+}
+
 export const userSignup = (data, successCb) => (
 	fetch('/signup', {
 		method: 'post',
@@ -91,7 +101,7 @@ const checkStatus = res => {
 		error.status = res.statusText;
 		error.response = res;
 		console.log(res.status, error);
-		throw error;
+		return res;
 	}
 }
 

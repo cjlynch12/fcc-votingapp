@@ -74,6 +74,7 @@ export default class NewPoll extends React.Component {
 		let newPollData = {
 			author: user.username,
 			userId: user._id,
+			token: this.props.token,
 			pollCreated: user.pollCreated,
 			topic: this.state.question,
 			options: formatOptions(this.state.options)

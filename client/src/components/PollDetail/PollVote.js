@@ -35,6 +35,7 @@ export default class PollVote extends React.Component {
 			let voteNum = this.props.pollVoteData.voteNum + 1;
 			let voteData = {
 				userId: this.props.user._id,
+				token: this.props.token,
 				options,
 				voteNum
 			};
@@ -47,18 +48,21 @@ export default class PollVote extends React.Component {
 		this.handleClose();
 	}
 	render() {
+	    let pollVoteData = this.props.pollVoteData;
+		let isLogin = !!this.props.token;
+		let loginReminder = isLogin ? "Vote and view poll result" : "Please login to vote";
+		let actionLabel = isLogin ? "Vote and see result >>" : "See poll result >>";
+		let optionMsg = isLogin ? "I'd like to vote for" : "Please login in to vote for"
 		const actions = [
 			<RaisedButton className="poll-vote-btn" label="<< Back to list" style={{float: 'left'}} onTouchTap={this.handleClose}/>,
 			<Link to={'/poll' + this.props.pollVoteData._id} >
-			 	<RaisedButton className="poll-vote-btn" label="Vote and see result >>" primary={true}  onTouchTap={this.handleVote}/>
+			 	<RaisedButton className="poll-vote-btn" label={actionLabel} primary={true}  onTouchTap={this.handleVote}/>
 	 		</Link>
 	    ];
-	    let pollVoteData = this.props.pollVoteData;
-	    let loginReminder = this.props.user._id ? "V" : "Please login to v";
 	    return (
 	      <div>
 	        <Dialog
-	          title={loginReminder + 'ote and view poll result'}
+	          title={loginReminder}
 	          actions={actions}
 	          actionsContainerStyle={{padding: "0px 25px 40px 25px"}}
 	          modal={false}
@@ -68,7 +72,7 @@ export default class PollVote extends React.Component {
 	          <h3 className="text-title-3">Question</h3>
 	          <p className="poll-question">{pollVoteData.topic}</p>
 	          <div className="poll-vote-wrapper">
-	          	  <p className="text-title-5">I'd like to vote for</p>
+	          	  <p className="text-title-5">{optionMsg}</p>
 		          <SelectField className="poll-vote-option"
 			          floatingLabelText="Choose an option..."
 			          value={this.state.optionSelected.value}

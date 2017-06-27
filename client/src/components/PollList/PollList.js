@@ -21,20 +21,26 @@ const EditBtn = (props) => (
 	</div>
 )
 
-const PollListItem = (props) => (
-	<ListItem className="poll-list-item"
-        leftIcon={props.deletable ? <EditBtn /> : <VoteNum voteNum={props.voteNum} />}
-        primaryText={props.topic}
-        secondaryText={
-        	<div className="list-item-secondary">
-				<span className="author">{props.deletable ? `vote: ${props.voteNum}` : `by ${props.author}`}</span>
-				<span className="bar"> | </span>
-				<span className="time">{props.postTimeDisplay}</span>
-			</div>
-        }
-        onTouchTap={props.handleListClick}
-    />
-)
+const PollListItem = (props) => {
+	let primaryText = props.voted ? 
+		<div className="poll-list-primarytext">{props.topic} <span className="voted">voted</span></div>
+		: 
+		<div className="poll-list-primarytext">{props.topic}</div>
+	return (
+		<ListItem className="poll-list-item"
+	        leftIcon={props.deletable ? <EditBtn /> : <VoteNum voteNum={props.voteNum} />}
+	        primaryText={primaryText}
+	        secondaryText={
+	        	<div className="list-item-secondary">
+					<span className="author">{props.deletable ? `vote: ${props.voteNum}` : `by ${props.author}`}</span>
+					<span className="bar"> | </span>
+					<span className="time">{props.postTimeDisplay}</span>
+				</div>
+	        }
+	        onTouchTap={props.handleListClick}
+	    />
+    )
+}
 
 class PollList extends React.Component {
 	state = {
@@ -60,7 +66,7 @@ class PollList extends React.Component {
 				return pollList.map(poll => (
 					user.pollVoted.includes(poll._id) ?
 					<Link to={'/poll' + poll._id} key={poll._id} >
-						<PollListItem {...poll} postTimeDisplay={this.parseTime(poll.postTime)} />
+						<PollListItem {...poll} postTimeDisplay={this.parseTime(poll.postTime)} voted={true} />
 					</Link> 
 					:
 					<PollListItem key={poll._id} {...poll} 
@@ -144,6 +150,7 @@ class PollList extends React.Component {
 				<div className="background-poll1" style={{backgroundImage: "url(./images/poll1.jpg)"}}/>
 				<PollVote 
 					user={this.props.user}
+					token={this.props.token}
 					pollVoteOpen={this.state.pollVoteOpen} 
 					pollVoteData={this.state.pollData} 
 					closePollVote={this.closePollVote} 
@@ -151,6 +158,7 @@ class PollList extends React.Component {
 				/>
 				<PollEdit
 					user={this.props.user}
+					token={this.props.token}
 					pollEditOpen={this.state.pollEditOpen} 
 					pollData={this.state.pollData} 
 					closePollEdit={this.closePollEdit} 

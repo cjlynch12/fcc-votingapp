@@ -23,10 +23,10 @@ class Header extends React.Component{
 	state = {
 		sidebarOpen: false,
 		menuOpen: false,
-		login: !!this.props.user._id
+		login: !!this.props.token
 	}
 	componentWillReceiveProps(nextProps){
-		this.setState({login: !!nextProps.user._id})
+		this.setState({login: !!nextProps.token})
 	}
 	handleSidebarToggle = () => this.setState({sidebarOpen: !this.state.sidebarOpen})
 	handleSidebarClose = () => this.setState({sidebarOpen: false})
@@ -91,7 +91,7 @@ class Header extends React.Component{
 		        <Drawer 
 		        	className="header-nav-side"
 		        	width={200} docked={false} openSecondary={true}
-		        	sidebarOpen={this.state.sidebarOpen} 
+		        	open={this.state.sidebarOpen} 
 		        	onRequestChange={(sidebarOpen) => this.setState({sidebarOpen})}
 		        	containerStyle={drawerContainerStyle}
 				>

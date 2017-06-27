@@ -13,7 +13,7 @@ import PollDetail from './components/PollDetail/PollDetail';
 import Signin from './components/Signin/Signin';
 import NewPoll from './components/NewPoll/NewPoll';
 // server communication
-import {getPollList, userSignup, userLogin, userLogout} from './lib/client';
+import {getPollList, userSignup, userLogout} from './lib/client';
 import {updatePollList, addNewPoll, removePollById} from './lib/helper';
 
 const basePath = "http://localhost:3000/";
@@ -23,33 +23,58 @@ class App extends React.Component {
 		signinOpen: false,
 		newPollOpen: false,
 		pollList: [],
-		user: {_id: '123'}
+		user: {},
+		token: ''
 	}
 	componentDidMount(){
 		this.loadPollList();
+		this.setState({
+			user: JSON.parse(localStorage.user || "{}"),
+			token: localStorage.token || ""
+		});
+		this.updatePollList = setInterval(this.loadPollList, 10000);
+	}
+	componentWillUnmount(){
+		clearInterval(updatePollList);
 	}
 	loadPollList = () => getPollList(pollList => this.setState({pollList}))
-	userSignup = () => {
-		console.log('usersignup');
-		this.userLogin();
+	userSignup = (data) => {
+		userSignup(data, res => {
+			if(res.message === "Sign Up Successfully!")
+				this.userLogin(data);
+		});
 	}
-	userLogin = () => {
-		console.log('userlogin');
+	userLogin = (resData) => {	
+		this.setState({
+			user: resData.user,
+			token: resData.token
+		});
+		localStorage.user = JSON.stringify(resData.user);
+		localStorage.token = resData.token;
 	}
 	userLogout = () => {
-		console.log('userlogout');
+		userLogout(res => {
+			if(res.message === "Logout Successfully!"){
+				this.setState({user: {}, token: ''});
+				localStorage.user = "{}";
+				localStorage.token = "";
+			}
+		})
 	}
 	updateDataForNewVote = (updatedPoll, updatedUser) => {
 		let updatedPollList = updatePollList(updatedPoll, this.state.pollList);
 		this.setState({pollList: updatedPollList, user: updatedUser});
+		localStorage.user = JSON.stringify(updatedUser);
 	} 
 	updateDataForNewPoll = (newPoll, updatedUser) => {
 		let updatedPollList = addNewPoll(newPoll, this.state.pollList);
 		this.setState({pollList: updatedPollList, user: updatedUser});
+		localStorage.user = JSON.stringify(updatedUser);
 	}
 	updateDataForDeletePoll = (pollId, updatedUser) => {
 		let updatedPollList = removePollById(pollId, this.state.pollList);
 		this.setState({pollList: updatedPollList, user: updatedUser});
+		localStorage.user = JSON.stringify(updatedUser);
 	}
 	openSignin = () => this.setState({signinOpen: true})
 	closeSignin = () => this.setState({signinOpen: false})
@@ -60,7 +85,7 @@ class App extends React.Component {
 		    <Router>
 		    	<div className={this.state.divide ? "app-root divide" : "app-root"}>
 		    		<Header openSignin={this.openSignin} openNewPoll={this.openNewPoll} 
-		    			user={this.state.user} userLogout={this.userLogout}
+		    			token={this.state.token} userLogout={this.userLogout}
 		    		/>
 
 		    		<Route exact path="/" render={() => <Home openSignin={this.openSignin} />} />
@@ -68,7 +93,8 @@ class App extends React.Component {
 		    		<Route path="/list" render={() => (
 		    			<PollList 
 		    				pollList={this.state.pollList} 
-		    				user={this.state.user} 
+		    				user={this.state.user}
+		    				token={this.state.token} 
 		    				updateDataForNewVote={this.updateDataForNewVote}
 		    			/>
 		    		)} />
@@ -79,6 +105,7 @@ class App extends React.Component {
 		    			return <PollList 
 		    				pollList={pollList} 
 		    				user={this.state.user} 
+		    				token={this.state.token} 
 		    				deletable={true}
 		    				updateDataForDeletePoll={this.updateDataForDeletePoll}
 		    			/>
@@ -93,7 +120,7 @@ class App extends React.Component {
 		    			userSignup={this.userSignup} userLogin={this.userLogin}
 		    		/>
 		    		<NewPoll 
-		    			pollList={this.state.pollList} user={this.state.user} 
+		    			pollList={this.state.pollList} user={this.state.user} token={this.state.token}
 		    			updateDataForNewPoll={this.updateDataForNewPoll}
 		    			open={this.state.newPollOpen} closeNewPoll={this.closeNewPoll} />
 		    		<Footer />

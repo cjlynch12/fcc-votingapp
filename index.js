@@ -116,6 +116,17 @@ app.get('/users', (req, res) => {
 	});
 });
 
+// check username
+app.get('/users/:username', (req, res) => {
+	Users.find({username: req.params.username}, (err, user) => {
+		if(user.length){
+			res.json({message: 'username exists'});
+		} else {
+			res.json({message: 'username ok'});
+		}
+	})
+})
+
 // detele user (development only)
 // app.delete('/users/:id', (req, res) => {
 // 	Users.findByIdAndRemove(req.params.id, (err, user) => {
@@ -133,7 +144,7 @@ app.post('/signup', (req, res) => {
 	Users.register(new Users({username: req.body.username}),
 	req.body.password, (err, user) => {
     	if(err){
-    		return res.status(500).json({err: err});
+    		return res.status(500).json({message: err.message});
     	}
     	user.save((err, user) => {
     		passport.authenticate('local')(req, res, () => (

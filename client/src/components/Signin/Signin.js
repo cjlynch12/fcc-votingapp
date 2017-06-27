@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import {checkUsername, userLogin} from '../../lib/client';
 import './Signin.css'
 
 const dialogStyle = {
@@ -32,8 +33,18 @@ class Signin extends React.Component {
 		this.setState({open: true})
 	}
 	handleClose = () => {
-		this.setState({open: false})
+		this.setState({
+			open: false, 
+			fields: {
+				username: '',
+				password: ''
+			}
+		})
 		this.props.closeSignin();
+	}
+	handleFormSubmit = ({type, data}) => {
+		this.props[type](data);
+		this.handleClose();
 	}
 	render(){
 		return (
@@ -52,7 +63,7 @@ class Signin extends React.Component {
 	          	<i className="fa fa-github-square"></i>
 	          </div>
 	          <p>Or use your email</p>
-	          <SigninTab userSignup={this.props.userSignup} userLogin={this.props.userLogin} />
+	          <SigninTab fields={this.state.fields} handleFormSubmit={this.handleFormSubmit} />
 	        </Dialog>
 	    );
 	}
@@ -85,25 +96,43 @@ class SigninTab extends React.Component{
 		errorText[name] = '';
 		this.setState({fields, errorText});
 	}
-	handleSubmit = () => {
+	handleSubmit = type => {
 		let {username, password} = this.state.fields;
-		if(username === '' || password === ''){
-			let errorText = {}
-			if(username === ''){
-				errorText.username = 'Username is required';
-			} else {
-				errorText.password = 'Password is required';
-			}
+		let errorText = this.state.errorText;
+		if(errorText.username || errorText.password) return;
+		if(username === '' || password === '' || password.length < 6){
+			if(username === '') errorText.username = 'Username is required';
+			if(password === '') errorText.password = 'Password is required';
+			if(password.length < 6) errorText.password = 'Password must have at least 6 characters';
 			this.setState({errorText});
 			return;
 		}
-		
-
+		if(type === 'userSignup') {
+			checkUsername(username, res => {
+				if(res.message === 'username exists'){
+					errorText.username = 'Username already exists';
+					this.setState({errorText});
+					return;
+				} else {
+					this.props.handleFormSubmit({type, data: {username, password}});
+				}
+			})
+		} else {
+			userLogin({username, password}, res => {
+				if(res.message === "Login Successfully"){
+					this.props.handleFormSubmit({type, data: res});
+				} else {
+					errorText.username = 'Username or password is not correct';
+					this.setState({errorText});
+					return;
+				}
+			});
+		}
 	}	
 	renderTab = type => {
-		let label = type === 'signup' ? 'Sign up' : 'Log in';
+		let label = type === 'userSignup' ? 'Sign up' : 'Log in';
 		return (
-			<Tab label="Sign up" buttonStyle={tabStyle.buttonStyle}>
+			<Tab label={label} buttonStyle={tabStyle.buttonStyle}>
 			  <div className="signin-tab-content">
 			    <TextField
 			    	name="username"
@@ -119,9 +148,10 @@ class SigninTab extends React.Component{
 			    	onChange={this.handleInputChange}
 			    	errorText={this.state.errorText.password}
 			        hintText="Password"
+			        type="password"
 			        fullWidth={true}
 			    />
-			    <RaisedButton label="Sign up" primary={true} style={btnStyle} onTouchTap={() => this.handleSubmit(type)} />
+			    <RaisedButton label={label} primary={true} style={btnStyle} onTouchTap={() => this.handleSubmit(type)} />
 			  </div>
 			</Tab>
 		)
@@ -129,8 +159,8 @@ class SigninTab extends React.Component{
 	render(){
 		return (
 			<Tabs tabItemContainerStyle={tabStyle.tabItemContainerStyle}>
-				{this.renderTab('signup')}
-			    {this.renderTab('login')}
+				{this.renderTab('userLogin')}
+				{this.renderTab('userSignup')}
 			</Tabs>
 		)
 	}
