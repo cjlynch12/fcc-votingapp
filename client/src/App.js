@@ -13,7 +13,7 @@ import PollDetail from './components/PollDetail/PollDetail';
 import Signin from './components/Signin/Signin';
 import NewPoll from './components/NewPoll/NewPoll';
 // server communication
-import {getPollList, userSignup, userLogout} from './lib/client';
+import {getPollList, userSignup, userLogin, userLogout} from './lib/client';
 import {updatePollList, addNewPoll, removePollById} from './lib/helper';
 
 const basePath = "http://localhost:3000/";
@@ -32,16 +32,17 @@ class App extends React.Component {
 			user: JSON.parse(localStorage.user || "{}"),
 			token: localStorage.token || ""
 		});
-		this.updatePollList = setInterval(this.loadPollList, 10000);
+		// this.updatePollList = setInterval(this.loadPollList, 10000);
 	}
 	componentWillUnmount(){
-		clearInterval(updatePollList);
+		// clearInterval(this.updatePollList);
 	}
 	loadPollList = () => getPollList(pollList => this.setState({pollList}))
 	userSignup = (data) => {
 		userSignup(data, res => {
-			if(res.message === "Sign Up Successfully!")
-				this.userLogin(data);
+			if(res.message === "Sign Up Successfully!"){
+				userLogin(data, resData => this.userLogin(resData));
+			}
 		});
 	}
 	userLogin = (resData) => {	
@@ -110,6 +111,7 @@ class App extends React.Component {
 		    				updateDataForDeletePoll={this.updateDataForDeletePoll}
 		    			/>
 		    		}} />
+		    		
 		    		<Route path="/poll:pollId" render={({match}) => {
 		    			let pollId = match.params.pollId;
 		    			let pollData = this.state.pollList.find(poll => poll._id === pollId);
