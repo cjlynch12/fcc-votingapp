@@ -5,8 +5,8 @@ let cookieParser = require('cookie-parser');
 let passport = require('passport');
 let path = require('path');
 
-// mongoose.connect(process.env.PROD_MONGODB);
-mongoose.connect('mongodb://localhost:27017/polls');
+mongoose.connect(process.env.MONGODB_URI);
+// mongoose.connect('mongodb://localhost:27017/polls');
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'mongodb connection error'));
 db.once('open', () => console.log('mongodb connected'));
@@ -25,6 +25,9 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use(passport.initialize());
+
+// render index.html
+app.use('/', express.static(path.join(__dirname, 'client', 'build')));
 
 // get all polls
 app.get('/poll', (req, res) => {

@@ -1,6 +1,5 @@
 let jwt = require('jsonwebtoken');
-// need to acquire from heroku env config
-let secretKey = 'q2er1-6p1sw-0nj7q-e4c1s';
+let secretKey = process.env.SECRET_KEY;
 
 exports.getToken = function(user){
 	return jwt.sign(user, secretKey, {
