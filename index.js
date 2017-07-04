@@ -4,6 +4,7 @@ let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let passport = require('passport');
 let path = require('path');
+let favicon = require('server-favicon');
 
 mongoose.connect(process.env.MONGODB_URI);
 // mongoose.connect('mongodb://localhost:27017/polls');
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 // render index.html
+app.use(favicon(path.join(__dirname, 'client', 'favicon.png')));
 app.use('/', express.static(path.join(__dirname, 'client', 'build')));
 
 // get all polls
