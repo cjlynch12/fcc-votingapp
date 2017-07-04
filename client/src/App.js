@@ -16,7 +16,7 @@ import NewPoll from './components/NewPoll/NewPoll';
 import {getPollList, userSignup, userLogin, userLogout} from './lib/client';
 import {updatePollList, addNewPoll, removePollById} from './lib/helper';
 
-const basePath = "http://localhost:3000/";
+const basePath = "https://jia-fcc-votingapp.herokuapp.com/";
 
 class App extends React.Component {
 	state = {
@@ -111,7 +111,7 @@ class App extends React.Component {
 		    				updateDataForDeletePoll={this.updateDataForDeletePoll}
 		    			/>
 		    		}} />
-		    		
+
 		    		<Route path="/poll:pollId" render={({match}) => {
 		    			let pollId = match.params.pollId;
 		    			let pollData = this.state.pollList.find(poll => poll._id === pollId);

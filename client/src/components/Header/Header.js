@@ -66,11 +66,11 @@ class Header extends React.Component{
 					            		Create New
 					            	</Link>
 					            </MenuItem>
-					            <MenuItem onTouchTap={this.handleMenuClose}>
-					            	<Link className="header-nav-mypolls" to="/mypoll" >
-					            		View My Polls
-					            	</Link>
-					            </MenuItem>
+				            	<Link className="header-nav-mypolls" to="/mypoll" >
+				            		<MenuItem onTouchTap={this.handleMenuClose}>
+				            			View My Polls
+				            		</MenuItem>
+				            	</Link>
 					            <Divider />
 					            <MenuItem onTouchTap={() => {this.handleLogout(); this.handleMenuClose();}}>
 					            	<Link className="header-nav-logout" to="#">
