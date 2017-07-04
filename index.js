@@ -4,7 +4,7 @@ let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let passport = require('passport');
 let path = require('path');
-let favicon = require('server-favicon');
+let favicon = require('serve-favicon');
 
 mongoose.connect(process.env.MONGODB_URI);
 // mongoose.connect('mongodb://localhost:27017/polls');
