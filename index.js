@@ -28,8 +28,8 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 // render favicon and index.html 
-app.use(favicon(path.join(__dirname, 'client', 'build', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'client', 'build')));
+app.use(favicon(path.join(__dirname, 'client', 'build', 'favicon.ico')));
 
 // get all polls
 app.get('/poll', (req, res) => {
