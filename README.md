@@ -1,6 +1,6 @@
 # 2Poll, a Voting App
 
-2Poll is my solution to a freeCodeCamp full stack project challenge, [Build a Voting app](https://www.freecodecamp.org/challenges/build-a-voting-app). It allows users to browse existing polls as well as to sign up and login to vote or create new polls. The responsive design delivers clear and professional layout when accessing from all type of devices.
+2Poll is my solution to a freeCodeCamp full stack project challenge, [Build a Voting app](https://www.freecodecamp.org/challenges/build-a-voting-app). It allows users to browse existing polls as well as to sign up and login to vote or create new polls. The app's responsive design delivers clear and professional layout when accessing from all type of devices.
 
 See it in action: https://jia-fcc-votingapp.herokuapp.com/.
 
@@ -21,4 +21,4 @@ See it in action: https://jia-fcc-votingapp.herokuapp.com/.
 * The interactive bar chart showing poll statistics is created with **d3**.
 
 ## To-do:
-- [ ] Enable sign up and login with social network account
+- [ ] Enable sign up and login with social network account.
